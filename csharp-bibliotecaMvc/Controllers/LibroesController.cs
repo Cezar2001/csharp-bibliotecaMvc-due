@@ -56,14 +56,14 @@ namespace csharp_bibliotecaMvc.Controllers
         // GET: Libroes/Create
         public IActionResult Create()
         {
-            Libro myLibro = new Libro();
-            myLibro.Autori = new List<Autore>();
-            myLibro.Autori.Add(new csharp_bibliotecaMvc.Models.Autore { Cognome = "Dante", Nome = "Alighieri", DataNascita = DateTime.Parse("26/04/1340") });
-            myLibro.Autori.Add(new csharp_bibliotecaMvc.Models.Autore { Cognome = "Giorgio", Nome = "Bocca", DataNascita = DateTime.Parse("26/04/1933") });
+            //Libro myLibro = new Libro();
+            //myLibro.Autori = new List<Autore>();
+            //myLibro.Autori.Add(new csharp_bibliotecaMvc.Models.Autore { Cognome = "Dante", Nome = "Alighieri", DataNascita = DateTime.Parse("26/04/1340") });
+            //myLibro.Autori.Add(new csharp_bibliotecaMvc.Models.Autore { Cognome = "Giorgio", Nome = "Bocca", DataNascita = DateTime.Parse("26/04/1933") });
 
             ViewData["Lista"] = _context.Autori.ToList<Autore>();
 
-            return View(myLibro);
+            return View(); //myLibro
         }
 
         // POST: Libroes/Create
