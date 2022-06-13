@@ -1,0 +1,60 @@
+﻿@model csharp_bibliotecaMvc.Models.Libro
+
+@{
+    ViewData["Title"] = "Create";
+}
+@using (Html.BeginForm("Create", "Libroes", FormMethod.Post))
+{
+    <table cellpadding="0" cellspacing="0" class="center">
+        <tr>
+            <th colspan="2" align="center">Inserisci i dati del libro:</th>
+        </tr>
+        <tr>
+            <td><p style="color:red;font-weight: bold;">Titolo: </p></td>
+            <td>
+                @Html.TextBoxFor(m => m.Titolo)
+            </td>
+        </tr>
+        <tr>
+            <td><p style="color:red;font-weight: bold;">Scaffale:</p> </td>
+            <td>
+                @Html.TextBoxFor(m => m.Scaffale)
+            </td>
+        </tr>
+        <tr>
+            <td><p style="color:red;font-weight: bold;">Stato: </p></td>
+            <td>
+                @Html.DropDownListFor(m => m.Stato, new List<SelectListItem>
+                { new SelectListItem{Text="Libero", Value="Libero"},
+                    new SelectListItem{Text="In prestito", Value="InPrestito"}}, "Please select")
+            </td>
+        </tr>
+        <tr>
+            <td><p style="color:red;font-weight: bold;">Lista autori</p></td>
+            <td>
+        @if (Model != null && Model.Autori != null)  
+            {  
+                for (int i = 0; i < Model.Autori.Count(); i++)  
+                {  
+                <tr >  
+                    <td style="font-size: 12px; padding-left: 2px">  
+                        @Html.TextBoxFor(m => m.Autori[i].Cognome);
+                        @Html.TextBoxFor(m => m.Autori[i].Nome);
+                        @Html.TextBoxFor(m => m.Autori[i].DataNascita);
+                    </td>  
+                </tr>  
+                 
+                }  
+            }  
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Submit"/></td>
+        </tr>
+    </table>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
