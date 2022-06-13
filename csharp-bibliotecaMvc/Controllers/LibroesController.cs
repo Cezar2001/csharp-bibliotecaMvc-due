@@ -86,10 +86,10 @@ namespace csharp_bibliotecaMvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                string str = Request.Form["AutoreData"];
-                string[] words = str.Split(',');
+                //string str = Request.Form["AutoreData"];
+                //string[] words = str.Split(',');
 
-                Autore nuovoAutore = new Autore() { Cognome = words[0], Nome = words[1], DataNascita = DateTime.Parse(words[2]) };
+                //Autore nuovoAutore = new Autore() { Cognome = words[0], Nome = words[1], DataNascita = DateTime.Parse(words[2]) };
 
                 _context.Add(libro);
                 await _context.SaveChangesAsync();
