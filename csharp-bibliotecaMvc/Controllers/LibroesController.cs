@@ -50,7 +50,6 @@ namespace csharp_bibliotecaMvc.Controllers
                     return View(l);
             }
             return NotFound();
-            
             //return View(libro);
         }
 
@@ -59,8 +58,10 @@ namespace csharp_bibliotecaMvc.Controllers
         {
             Libro myLibro = new Libro();
             myLibro.Autori = new List<Autore>();
-            myLibro.Autori.Add(new csharp_bibliotecaMvc.Models.Autore { Nome = "Dante", Cognome = "Alighieri", DataNascita = DateTime.Parse("26/04/1340") });
-            myLibro.Autori.Add(new csharp_bibliotecaMvc.Models.Autore { Nome = "Giorgio", Cognome = "Bocca", DataNascita = DateTime.Parse("26/04/1933") });
+            myLibro.Autori.Add(new csharp_bibliotecaMvc.Models.Autore { Cognome = "Dante", Nome = "Alighieri", DataNascita = DateTime.Parse("26/04/1340") });
+            myLibro.Autori.Add(new csharp_bibliotecaMvc.Models.Autore { Cognome = "Giorgio", Nome = "Bocca", DataNascita = DateTime.Parse("26/04/1933") });
+
+            ViewData["Lista"] = _context.Autori.ToList<Autore>();
 
             return View(myLibro);
         }
@@ -85,6 +86,11 @@ namespace csharp_bibliotecaMvc.Controllers
         {
             if (ModelState.IsValid)
             {
+                string str = Request.Form["AutoreData"];
+                string[] words = str.Split(',');
+
+                Autore nuovoAutore = new Autore() { Cognome = words[0], Nome = words[1], DataNascita = DateTime.Parse(words[2]) };
+
                 _context.Add(libro);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -193,13 +199,14 @@ namespace csharp_bibliotecaMvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddAutore([Bind("IdLibro,Nome")] AutoreLibro autoreLibro)
+        public IActionResult AddAutore([Bind("IdLibro,Nome,Cognome")] AutoreLibro autoreLibro)
         {
             if (ModelState.IsValid)
             {
                 Autore nuovo = new Autore()
                 {
                     Nome = autoreLibro.Nome,
+                    Cognome = autoreLibro.Cognome,
                 };
 
                 _context.Autori.Add(nuovo);
@@ -217,5 +224,56 @@ namespace csharp_bibliotecaMvc.Controllers
             }
             return RedirectToAction("Index");
         }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult AddAutoreSelect([Bind("IdLibro,Nome,Cognome")] AutoreLibro autoreLibro)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        Autore nuovo = new Autore()
+        //        {
+        //            Nome = autoreLibro.Nome,
+        //            Cognome = autoreLibro.Cognome,
+        //        };
+
+        //        _context.Autori.Add(nuovo);
+
+        //        var Libro = _context.Libri.FirstOrDefault(m => m.LibroID == autoreLibro.IdLibro);
+        //        if (Libro.Autori == null)
+        //        {
+        //            Libro.Autori = new List<Autore>();
+        //        }
+
+        //        Libro.Autori.Add(nuovo);
+
+
+        //        _context.SaveChanges();
+        //    }
+        //    return RedirectToAction("Index");
+        //}
+
+        //public IActionResult AddAutoreSelect(int LibroID, List<Autore> Autori)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var libro = _context.Libri.FirstOrDefault(m => m.LibroID == LibroID);
+
+        //        foreach (var item in Autori)
+        //        {
+        //            var autore = _context.Autori.Find(Convert.ToInt32(item));
+
+        //            if (autore != null)
+        //            {
+
+        //                if (libro.Autori == null) { libro.Autori = new List<Autore>(); }
+        //                libro.Autori.Add(autore);
+        //            }
+        //        }
+
+        //        _context.SaveChanges();
+        //    }
+        //    return RedirectToAction("Index");
+        //}
     }
 }

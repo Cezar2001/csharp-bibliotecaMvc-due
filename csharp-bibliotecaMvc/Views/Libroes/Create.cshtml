@@ -25,36 +25,51 @@
             <td><p style="color:red;font-weight: bold;">Stato: </p></td>
             <td>
                 @Html.DropDownListFor(m => m.Stato, new List<SelectListItem>
-                { new SelectListItem{Text="Libero", Value="Libero"},
-                    new SelectListItem{Text="In prestito", Value="InPrestito"}}, "Please select")
+                { new SelectListItem{Text="Disponibile", Value="Disponibile"},
+                    new SelectListItem{Text="Indisponibile", Value="Indisponibile"}}, "Please select")
             </td>
         </tr>
+
         <tr>
-            <td><p style="color:red;font-weight: bold;">Lista autori</p></td>
-            <td>
-        @if (Model != null && Model.Autori != null)  
-            {  
-                for (int i = 0; i < Model.Autori.Count(); i++)  
-                {  
-                <tr >  
-                    <td style="font-size: 12px; padding-left: 2px">  
-                        @Html.TextBoxFor(m => m.Autori[i].Cognome);
-                        @Html.TextBoxFor(m => m.Autori[i].Nome);
-                        @Html.TextBoxFor(m => m.Autori[i].DataNascita);
-                    </td>  
-                </tr>  
-                 
-                }  
-            }  
-            </td>
-        </tr>
-        <tr>
-            <td></td>
+            <td><button type="button" class="btn btn-primary" id="aggiungi">Aggiungi Autore</button></td>
             <td><input type="submit" value="Submit"/></td>
         </tr>
+
+        <tr id="container">
+            <td><p style="color:red;font-weight: bold;">Lista autori</p></td>
+        </tr>
     </table>
+
+<hr />
+
+<div class="form-group">
+    <label for="Autori">Scegli Autori</label>
+    <select name="AutoreData" id="autoriPresenti" multiple>
+        @foreach (var autore in ViewData["Lista"] as List<Autore>)
+        {
+            <option value="@autore.Cognome,@autore.Nome,@autore.DataNascita">@autore.Cognome @autore.Nome</option>
+        }
+    </select>
+</div>
 }
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+@section Scripts
+{
+<script>
+    const addInputAuth = document.getElementById("aggiungi");
+    const inputContainer = document.getElementById("container");
+    let currIndex = 0;
+    addInputAuth.addEventListener('click',(e)=>{
+        const NuovoTd = document.createElement("td");
+        NuovoTd.innerHTML = 
+            `
+            <input data-val="true" data-val-required="The Cognome field is required." id="Autori_${currIndex}__Cognome" name="Autori[${currIndex}].Cognome" type="text"  />
+            <input data-val="true" data-val-required="The Nome field is required." id="Autori_${currIndex}__Nome" name="Autori[${currIndex}].Nome" type="text" />
+            <input data-val="true" data-val-required="The DataNascita field is required." id="Autori_${currIndex}__DataNascita" name="Autori[${currIndex}].DataNascita" type="text" value="26/04/1340 00:00:00" />
+            `
+        inputContainer.appendChild(NuovoTd);
+        currIndex += 1;
+    });
+</script>
 }
